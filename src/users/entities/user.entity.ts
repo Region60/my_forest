@@ -4,38 +4,40 @@ import {
   PrimaryGeneratedColumn,
   Unique,
   CreateDateColumn,
-  OneToMany,
-} from "typeorm"
-//import { Project } from "src/project/entities/project.entity"
-import { Role } from "../../roles/role.enum"
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+import { Project } from 'src/project/entities/project.entity';
+import { Role } from '../../roles/role.enum';
 
-@Entity()
-@Unique(["email"])
+@Entity('users')
+@Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column({ length: 500 })
-  name: string
+  userName  : string;
 
   @Column()
-  email: string
+  email: string;
 
   @Column()
-  phone: string
+  phone: string;
 
   @Column()
-  password: string
+  userPassword: string;
 
-  @Column({ default: "unconfirmed" })
-  roles: Role
+  @Column({ default: 'unconfirmed' })
+  roles: Role;
 
   @CreateDateColumn()
-  registerDate: Date
+  registerDate: Date;
 
   @Column({ default: null })
-  confirmRegister: string
+  confirmRegister: string;
 
-  // @OneToMany(() => Project, (project) => project.user)
-  // project: Project[]
+  @ManyToMany(() => Project, (project)=>project.users)
+  @JoinTable()
+  projectss: Project[];
 }

@@ -6,14 +6,14 @@ import { CreateUserDto } from "./dto/create-user.dto"
 import { UpdateUserDto } from "./dto/update-user.dto"
 import { User } from "./entities/user.entity"
 import * as bcrypt from "bcrypt"
-//import { MailService } from "src/mail/mail.service"
+import { MailService } from "src/mail/mail.service"
 
 @Injectable()
 export class UsersService {
   constructor(
-    // @Inject("USERS_REPOSITORY")
-    // private userRepository: Repository<User>,
-    // //private mailServise: MailService
+    @Inject("USERS_REPOSITORY")
+    private userRepository: Repository<User>,
+    private mailServise: MailService
   ) {}
 
   private generateString(): string {
@@ -26,89 +26,81 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    // const candidate = await this.userRepository.findBy({
-    //   email: createUserDto.email,
-    // })
-    const candidate = []
-
+    const candidate = await this.userRepository.findBy({
+      email: createUserDto.email,
+    })
     if (!candidate[0]) {
       const randomString = this.generateString()
-      const { password } = createUserDto
-      const hashPassword: string = await bcrypt.hash(password, 10)
-      createUserDto.password = hashPassword
+      const { userPassword } = createUserDto
+      const hashPassword: string = await bcrypt.hash(userPassword, 10)
+      createUserDto.userPassword = hashPassword
       createUserDto.confirmRegister = randomString
-      // this.mailServise.sendMessageReg(
-      //   createUserDto.email,
-      //   randomString,
-      //   createUserDto.name
-      // )
-    //   const response = await this.userRepository.insert(createUserDto)
-    //   if (response.generatedMaps.length)
-    //     return "The record has been successfully created."
-    // } else {
-    //   return `a user with ${createUserDto.email} already exists`
-    // }
-    return "The record has been successfully created."
-  }}
-
-  // async findAll(): Promise<ResponseUserDto[]>{
-  //   return await this.userRepository.find({
-  //     select: {
-  //       id: true,
-  //       name: true,
-  //       registerDate: true,
-  //       phone: true,
-  //       email: true,
-  //       roles: true,
-  //     },
-      
-  //   })
-  // }
-
-  async findAll(){
-      return "find All"
+      this.mailServise.sendMessageReg(
+        createUserDto.email,
+        randomString,
+        createUserDto.userName
+      )
+      const response = await this.userRepository.insert(createUserDto)
+      if (response.generatedMaps.length)
+        return "The record has been successfully created."
+    } else {
+      return `a user with ${createUserDto.email} already exists`
     }
-
-  async findOneById(id: number) {
-    //const{password, ...user} = await this.userRepository.findOneBy({id })
-    return 'findOneById'
+    return "The record has been successfully created."
   }
 
-  // async findOneByEmail(email: string) {
-  //   return await this.userRepository.findOneBy({ email })
-  // }
+  async findAll(): Promise<ResponseUserDto[]>{
+    return await this.userRepository.find({
+      select: {
+        id: true,
+        userName: true,
+        registerDate: true,
+        phone: true,
+        email: true,
+        roles: true,
+      },
+      
+    })
+  }
+
+
+
+  async findOneById(id: number) {
+    const{userPassword, ...user} = await this.userRepository.findOneBy({id })
+    return user
+  }
+
+  async findOneByEmail(email: string) {
+    return await this.userRepository.findOneBy({ email })
+  }
+
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    //return await this.userRepository.update(id, { ...updateUserDto })
-    return 'update'
+    return await this.userRepository.update(id, { ...updateUserDto })
   }
 
   async updatePass(id: number, password: string) {
     const hashPassword: string = await bcrypt.hash(password, 10)
-    //return await this.userRepository.update(id, { password: hashPassword })
-    return 'updatepass'
+    return await this.userRepository.update(id, { userPassword: hashPassword })
   }
 
   async remove(id: number) {
-    //return await this.userRepository.delete(id)
-    return 'remove'
+    return await this.userRepository.delete(id)
   }
 
-  // async confirmReg(email: string, unicString: string) {
-  //   const { id } = await this.userRepository.findOneBy({ email })
-  //   return await this.userRepository.update(id, { confirmRegister: unicString })
-  // }
+  async confirmReg(email: string, unicString: string) {
+    const { id } = await this.userRepository.findOneBy({ email })
+    return await this.userRepository.update(id, { confirmRegister: unicString })
+  }
 
   async changeRole(id: string, role: Role) {
     console.log(id)
     console.log(role)
-    //return await this.userRepository.update(+id, { roles: role })
-    return 'change role'
+    return await this.userRepository.update(+id, { roles: role })
   }
 
   async confirmEmail(confirmRegister: string) {
-    // const { id } = await this.userRepository.findOneBy({ confirmRegister })
-    // return await this.userRepository.update(id, { roles: Role.User })
-    return 'confirm email'
+    const { id } = await this.userRepository.findOneBy({ confirmRegister })
+    return await this.userRepository.update(id, { roles: Role.User })
   }
 }
