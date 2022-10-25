@@ -29,7 +29,7 @@ export class Project {
     @Column({default:0})
     rating: number
 
-    @ManyToMany(() => User, (user)=>user.projectss)
+    @ManyToMany(() => User, (user)=>user.projects)
     users: User[];
 
 }

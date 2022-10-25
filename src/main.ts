@@ -9,6 +9,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   console.log('создать файл constans с константами провайдеров');
   console.log('прописать в openapi, че возвращают');
+  console.log('реализовать confirm email');
+  console.log('реализовать создание удаление проектов');
   const config = new DocumentBuilder()
     .setTitle('My FOREST')
     .setDescription('The TEST API description')

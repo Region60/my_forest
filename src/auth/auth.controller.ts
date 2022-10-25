@@ -1,6 +1,6 @@
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
-import { Controller, Get, Request, Post, UseGuards, Body } from '@nestjs/common';
+import { Controller, Get, Request, Post, UseGuards, Body, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('auth')
@@ -14,8 +14,8 @@ export class AuthController {
     return await this.authService.login(req.user);
   }
 
-  @Post('confirm')
-  async confirmReg(@Body() body){
-    return await this.authService.login(body.email)
+  @Get('confirm/:confString')
+  async confirmReg(@Param() param){
+    return await this.authService.confirm(param.confString)
   }
 }

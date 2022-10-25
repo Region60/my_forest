@@ -58,7 +58,7 @@ export class UsersController {
     return await this.usersService.updatePass(req.user.userId, body.password);
   }
 
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.usersService.remove(+id);

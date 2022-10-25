@@ -12,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     ProjectModule,
     MailModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true}),
   ],
 })
 export class AppModule {}

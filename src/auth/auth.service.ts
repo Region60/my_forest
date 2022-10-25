@@ -19,7 +19,7 @@ export class AuthService {
       const { userPassword, ...result } = user
       return result
     }
-    return null //оставить не удалять
+    return null 
   }
 
   async login(user: any) {
@@ -29,5 +29,10 @@ export class AuthService {
     }
   }
 
-  async confirmReg(email: string) {}
+  async confirm(confString: string) {
+    const user = await this.usersService.confirmRegister(confString)
+    console.log({user})
+    console.log({confString})
+
+  }
 }
