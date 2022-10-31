@@ -30,9 +30,6 @@ export class AuthService {
   }
 
   async confirm(confString: string) {
-    const user = await this.usersService.confirmRegister(confString)
-    console.log({user})
-    console.log({confString})
-
+    await this.usersService.confirmRegister(confString)
   }
 }

@@ -1,35 +1,41 @@
 import { PricePlan } from './pricePlan';
-import { User } from '../../users/entities/user.entity'
-import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from '../../users/entities/user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('projects')
 export class Project {
-    @PrimaryGeneratedColumn()
-    id:number
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @CreateDateColumn()
-    createDate: Date
+  @CreateDateColumn()
+  createDate: Date;
 
-    @Column()
-    creatorId: number
+  @Column()
+  creatorId: number;
 
-    @Column()
-    title: string
+  @Column()
+  title: string;
 
-    @Column()
-    photo: string
+  @Column()
+  photo: string;
 
-    @Column({
-        type: 'enum',
-        enum: PricePlan,
-        default: PricePlan.INITIAL,
-    })
-    pricePlan: PricePlan
+  @Column({
+    type: 'enum',
+    enum: PricePlan,
+    default: PricePlan.INITIAL,
+  })
+  pricePlan: PricePlan;
 
-    @Column({default:0})
-    rating: number
+  @Column({ default: 1 })
+  rating: number;
 
-    @ManyToMany(() => User, (user)=>user.projects)
-    users: User[];
-
+  @ManyToMany(() => User, (user) => user.projects)
+  users: User[];
 }

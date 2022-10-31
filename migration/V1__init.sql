@@ -16,12 +16,12 @@ CREATE TABLE IF NOT EXISTS projects (
     title VARCHAR(50) NOT NULL,
     photo VARCHAR(200) NOT NULL,
     "pricePlan" VARCHAR(50),
-    rating INT NOT NULL
+    rating INT NOT NULL DEFAULT 1
 );
 
-CREATE TABLE IF NOT EXISTS users_projects_project (
-    "idUser" INT NOT NULL,
-    "idProject" INT NOT NULL,
-    FOREIGN KEY ("idUser") REFERENCES users (id),
-    FOREIGN KEY ("idProject") REFERENCES projects (id)
+CREATE TABLE IF NOT EXISTS users_projects_projects (
+    "usersId" INT NOT NULL,
+    "projectsId" INT NOT NULL,
+    FOREIGN KEY ("usersId") REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY ("projectsId") REFERENCES projects (id) ON DELETE CASCADE
 );

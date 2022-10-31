@@ -1,4 +1,4 @@
-import { MailModule } from './../mail/mail.module';
+import { MailModule } from '../mail/mail.module';
 import { userProviders } from './users.providers';
 import { DatabaseModule } from '../database/database.module';
 import { Module } from '@nestjs/common';

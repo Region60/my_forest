@@ -22,7 +22,6 @@ export class ProjectController {
 
   @Post()
   createProject(@Body() createProjectDto: CreateProjectDto, @Req() req) {
-    console.log(req.user)
     return this.projectService.create(createProjectDto, req.user.userId);
   }
 
@@ -32,7 +31,7 @@ export class ProjectController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete()
+  @Delete(':id')
   deleteProject(@Param('id') id: string) {
     return this.projectService.delete(+id);
   }

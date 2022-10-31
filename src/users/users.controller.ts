@@ -1,5 +1,5 @@
 import { ResponseUserDto } from './dto/response-user.dto';
-import { JwtAuthGuard } from './../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   Controller,
   Get,
@@ -42,7 +42,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<ResponseUserDto> {
+  async findOne(@Param('id') id): Promise<ResponseUserDto> {
     return await this.usersService.findOneById(+id);
   }
 
@@ -58,22 +58,23 @@ export class UsersController {
     return await this.usersService.updatePass(req.user.userId, body.password);
   }
 
-  //@UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id) {
     return await this.usersService.remove(+id);
   }
 
   @Roles(Role.RootUser)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('changerole/:id/:role')
-  async changeRole(@Param('id') id: string, @Param('role') role: Role) {
+  async changeRole(@Param('id') id, @Param('role') role: Role) {
     return await this.usersService.changeRole(id, role);
   }
 
+  @Roles(Role.RootUser||Role.Unconfirmed||Role.Admin)
   @UseGuards(JwtAuthGuard)
   @Get('confirmEmail/:uniqValue')
-  async confirmEmail(@Param('uniqValue') uniqValue: string) {
+  async confirmEmail(@Param('uniqValue') uniqValue) {
     return await this.usersService.confirmEmail(uniqValue);
   }
 }
